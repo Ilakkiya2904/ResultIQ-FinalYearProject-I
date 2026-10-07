@@ -1,0 +1,65 @@
+def _compute_results(df: pd.DataFrame, marks_cols: list[str]) -> pd.DataFrame:
+    """
+    Add result columns to *df* (mutates a copy).
+
+    Columns added
+    -------------
+    <col>_numeric  — coerced float (NaN = absent/invalid)  [internal, dropped]
+    Total Marks    — sum of valid marks (absent → 0)
+    Subjects Appeared — count of subjects with a valid mark
+    Average        — mean of valid marks (0 if none)
+    Percentage     — (Total / max_possible) × 100
+    Result         — PASS / FAIL
+    """
+    df = df.copy()
+    n_subjects = len(marks_cols)
+    max_possible = n_subjects * DEFAULT_MAX_PER_SUBJECT
+
+    numeric_cols = []
+    for col in marks_cols:
+        num_col = f'__num_{col}'
+        df[num_col] = df[col].apply(_to_numeric)
+        numeric_cols.append(num_col)
+
+    # Total: treat absent/missing as 0
+    df['Total Marks'] = df[numeric_cols].fillna(0).sum(axis=1)
+
+    # Subjects appeared = count of non-None entries
+    df['Subjects Appeared'] = df[numeric_cols].notna().sum(axis=1)
+
+    # Average over appeared subjects only
+    df['Average'] = df.apply(
+        lambda row: (
+            row['Total Marks'] / row['Subjects Appeared']
+            if row['Subjects Appeared'] > 0 else 0.0
+        ),
+        axis=1
+    ).round(2)
+
+    # Percentage based on full possible marks (not just appeared subjects)
+    df['Percentage'] = (
+        (df['Total Marks'] / max_possible * 100) if max_possible > 0 else 0.0
+    ).round(2)
+
+    # PASS/FAIL logic
+    # A student passes if:
+    #   1. Overall percentage >= PASS_OVERALL_PERCENT
+    #   2. Each appeared subject has >= PASS_SUBJECT_MIN %
+    def _result(row) -> str:
+        if row['Percentage'] < PASS_OVERALL_PERCENT:
+            return 'FAIL'
+        # Check per-subject threshold
+        for num_col in numeric_cols:
+            val = row[num_col]
+            if val is not None and not pd.isna(val):
+                subject_pct = (val / DEFAULT_MAX_PER_SUBJECT) * 100
+                if subject_pct < PASS_SUBJECT_MIN:
+                    return 'FAIL'
+        return 'PASS'
+
+    df['Result'] = df.apply(_result, axis=1)
+
+    # Drop internal numeric columns
+    df.drop(columns=numeric_cols, inplace=True)
+
+    return df

@@ -1,0 +1,398 @@
+"""
+services/analyser.py
+====================
+Intelligent, content-driven workbook analyser for RESULTIQ — Module 5.
+
+Pure Python / pandas only.  Zero Flask or SQLAlchemy imports so the module
+can be unit-tested in complete isolation and reused by Module 6 without any
+framework coupling.
+
+Public API
+----------
+analyse_workbook(filepath)  ->  list[dict]
+    Open an Excel workbook and return a fully-enriched list of sheet dicts.
+    Each column dict is extended with 'classification' and 'quality' keys.
+    The returned structure is a drop-in replacement for the 'worksheets' JSON
+    already stored in UploadedFile.worksheets by Module 4.
+"""
+
+import re
+import pandas as pd
+import openpyxl
+
+
+# ------------------------------------------------------------------ #
+# Column-name patterns that should always be classified as 'identity'
+# regardless of data content (serial numbers, roll numbers, etc.).
+# ------------------------------------------------------------------ #
+_IDENTITY_NAME_PATTERNS = re.compile(
+    r'^\s*('
+    r'sl\.?\s*no\.?'
+    r'|s\.?no\.?'
+    r'|serial'
+    r'|roll\s*no\.?'
+    r'|reg(ister)?\s*(no\.?|number)'
+    r'|regiter\s*number'     # typo in reference workbook
+    r'|admission\s*no\.?'
+    r'|enroll(ment)?\s*(no\.?|number)?'
+    r'|student\s*id'
+    r'|id'
+    r')\s*$',
+    re.IGNORECASE,
+)
+
+# ------------------------------------------------------------------ #
+# Absent / non-numeric tokens that commonly appear in marks sheets
+# (case-insensitive, stripped).  These are *not* treated as errors.
+# ------------------------------------------------------------------ #
+ABSENT_TOKENS = frozenset({
+    'aa', 'ab', 'absent', 'na', 'n/a', 'n.a', 'n.a.', '-', '--', '---',
+    'nil', 'null', 'none', 'not appeared', 'withheld', 'w/h', 'wh',
+    'medical', 'detained', 'ex', 'exempted',
+})
+
+
+# ------------------------------------------------------------------ #
+# Helpers
+# ------------------------------------------------------------------ #
+
+def _is_absent_token(value: str) -> bool:
+    """Return True if a string represents a known absent/non-participation marker."""
+    return value.strip().lower() in ABSENT_TOKENS
+
+
+def _try_numeric(value) -> bool:
+    """Return True if *value* can be interpreted as a number."""
+    if pd.isna(value):
+        return False
+    try:
+        float(str(value).strip().replace(',', ''))
+        return True
+    except ValueError:
+        return False
+
+
+def _coerce_numeric_series(series: pd.Series):
+    """
+    Coerce a Series to numeric, treating absent tokens as NaN.
+    Returns (numeric_series, absent_mask).
+    """
+    def _convert(v):
+        if pd.isna(v):
+            return float('nan')
+        s = str(v).strip()
+        if _is_absent_token(s):
+            return float('nan')
+        try:
+            return float(s.replace(',', ''))
+        except ValueError:
+            return float('nan')
+
+    converted = series.map(_convert)
+    return converted
+
+
+# ------------------------------------------------------------------ #
+# Column classification
+# ------------------------------------------------------------------ #
+
+# Minimum fraction of non-blank values that must be numeric for a column
+# to be classified as 'marks'.
+_MARKS_NUMERIC_THRESHOLD = 0.60
+
+# A column whose absent-token count + numeric count accounts for at least
+# this fraction of non-blank values is eligible to be 'marks'.
+_MARKS_COVERAGE_THRESHOLD = 0.80
+
+# If unique values / non-blank count exceeds this, the column is 'identity'.
+_IDENTITY_UNIQUENESS_THRESHOLD = 0.85
+
+# A text column whose unique-value count is at most this many distinct values
+# is classified as 'category'.
+_CATEGORY_MAX_UNIQUE = 20
+
+# Fraction of non-blank values below which a column is 'empty'.
+_EMPTY_THRESHOLD = 0.05
+
+
+def _build_quality(series: pd.Series) -> dict:
+    """
+    Compute data-quality metrics for a single column Series
+    (the full column including blanks).
+    """
+    total = len(series)
+    null_mask = series.isna() | (series.astype(str).str.strip() == '')
+    filled = int((~null_mask).sum())
+    missing = int(null_mask.sum())
+
+    non_null = series[~null_mask]
+
+    numeric_count = int(non_null.apply(_try_numeric).sum())
+    absent_count  = int(non_null.apply(
+        lambda v: _is_absent_token(str(v))
+    ).sum())
+    text_count    = filled - numeric_count - absent_count
+
+    try:
+        unique_count = int(non_null.nunique())
+    except Exception:
+        unique_count = 0
+
+    return {
+        'total':               total,
+        'filled':              filled,
+        'missing':             missing,
+        'numeric_count':       numeric_count,
+        'absent_token_count':  absent_count,
+        'text_count':          text_count,
+        'unique_count':        unique_count,
+    }
+
+
+def _infer_dtype_label(series: pd.Series) -> str:
+    """Human-readable dtype label (mirrors Module 4 logic for consistency)."""
+    dtype = series.dtype
+    if pd.api.types.is_integer_dtype(dtype):
+        return 'Integer'
+    if pd.api.types.is_float_dtype(dtype):
+        return 'Decimal'
+    if pd.api.types.is_bool_dtype(dtype):
+        return 'Boolean'
+    if pd.api.types.is_datetime64_any_dtype(dtype):
+        return 'Date/Time'
+    return 'Text'
+
+
+def classify_column(series: pd.Series, col_name: str) -> tuple[str, dict]:
+    """
+    Classify a single column by inspecting its actual values.
+
+    Parameters
+    ----------
+    series   : full column including NaN / blanks
+    col_name : original column name (used only for sample extraction,
+               NOT for determining classification)
+
+    Returns
+    -------
+    (classification_label, quality_dict)
+
+    Classification labels
+    ---------------------
+    'empty'    – fewer than 5 % non-blank values
+    'marks'    – ≥ 60 % numeric + absent tokens cover ≥ 80 % of non-blanks
+    'identity' – high uniqueness, non-numeric (names, IDs, roll numbers)
+    'category' – low uniqueness text (gender, pass/fail, grade letters)
+    'metadata' – datetime or free-form administrative text
+    'text'     – catch-all for other text columns
+    """
+    quality = _build_quality(series)
+
+    # --- identity name guard (Fix 2) ---
+    # Columns whose *names* match known identity patterns (serial/roll/register)
+    # must never be classified as marks, even if 100% numeric.
+    if _IDENTITY_NAME_PATTERNS.match(col_name):
+        quality['suitable_for_analysis'] = False
+        return 'identity', quality
+    filled  = quality['filled']
+    total   = quality['total']
+
+    # --- empty ---
+    if total == 0 or (filled / total) < _EMPTY_THRESHOLD:
+        quality['suitable_for_analysis'] = False
+        return 'empty', quality
+
+    numeric_count = quality['numeric_count']
+    absent_count  = quality['absent_token_count']
+    unique_count  = quality['unique_count']
+
+    numeric_ratio  = numeric_count / filled if filled else 0
+    coverage_ratio = (numeric_count + absent_count) / filled if filled else 0
+
+    # --- marks ---
+    if (numeric_ratio  >= _MARKS_NUMERIC_THRESHOLD and
+            coverage_ratio >= _MARKS_COVERAGE_THRESHOLD):
+        quality['suitable_for_analysis'] = True
+        return 'marks', quality
+
+    # --- datetime / metadata ---
+    if pd.api.types.is_datetime64_any_dtype(series.dtype):
+        quality['suitable_for_analysis'] = False
+        return 'metadata', quality
+
+    # --- identity: high uniqueness, not numeric ---
+    if unique_count > 0 and filled > 0:
+        uniqueness_ratio = unique_count / filled
+        if uniqueness_ratio >= _IDENTITY_UNIQUENESS_THRESHOLD and numeric_ratio < 0.5:
+            quality['suitable_for_analysis'] = False
+            return 'identity', quality
+
+    # --- category: low-cardinality text ---
+    if unique_count <= _CATEGORY_MAX_UNIQUE and numeric_ratio < 0.5:
+        quality['suitable_for_analysis'] = False
+        return 'category', quality
+
+    # --- default: text ---
+    quality['suitable_for_analysis'] = False
+    return 'text', quality
+
+
+# ------------------------------------------------------------------ #
+# Sheet & workbook analysis
+# ------------------------------------------------------------------ #
+
+def analyse_sheet(df: pd.DataFrame, sheet_name: str) -> dict:
+    """
+    Analyse every column in a DataFrame.
+
+    Returns a sheet dict that is backwards-compatible with the Module 4
+    format but enriches each column dict with 'classification' and 'quality'.
+    """
+    if df is None or df.empty or len(df.columns) == 0:
+        return {
+            'name':       sheet_name,
+            'is_empty':   True,
+            'row_count':  0,
+            'columns':    [],
+        }
+
+    columns = []
+    for col in df.columns:
+        col_str = str(col).strip()
+
+        # Skip fully-unnamed blank columns (Module 4 already filters these,
+        # but guard here too).
+        series = df[col]
+        non_blank = series.dropna()
+        if col_str.startswith('Unnamed') and non_blank.empty:
+            continue
+
+        classification, quality = classify_column(series, col_str)
+
+        # Up to 3 representative sample values (non-null)
+        samples = [str(v) for v in non_blank.head(3).tolist()]
+
+        columns.append({
+            'name':           col_str,
+            'dtype':          _infer_dtype_label(series),
+            'samples':        samples,
+            # Module 5 additions:
+            'classification': classification,
+            'quality':        quality,
+        })
+
+    return {
+        'name':      sheet_name,
+        'is_empty':  len(columns) == 0,
+        'row_count': len(df),
+        'columns':   columns,
+    }
+
+
+def _detect_header_row(filepath: str, sheet_name: str) -> int:
+    """
+    Detect the actual header row in a worksheet by scanning raw cell values.
+
+    The header row is the first row where at least 3 cells contain short,
+    non-numeric text values (typical column names like 'Sl. No', 'Name',
+    'CIT-1', etc.).  This handles workbooks that have metadata / title
+    rows above the actual data header.
+
+    Returns the 0-based row index suitable for ``pd.read_excel(header=...)``.
+    Falls back to 0 if no clear header row is detected.
+    """
+    try:
+        wb = openpyxl.load_workbook(filepath, read_only=True, data_only=True)
+        ws = wb[sheet_name]
+    except Exception:
+        return 0
+
+    best_row = 0
+    try:
+        for row_idx, row in enumerate(ws.iter_rows(values_only=True)):
+            # Count cells that look like column-name text:
+            #   - non-empty string
+            #   - reasonably short (< 60 chars, to skip metadata blobs)
+            #   - not purely numeric
+            text_cell_count = 0
+            non_blank_count = 0
+            for val in row:
+                if val is None:
+                    continue
+                s = str(val).strip()
+                if not s:
+                    continue
+                non_blank_count += 1
+                if len(s) < 60:
+                    try:
+                        float(s.replace(',', ''))
+                        # Purely numeric — not a header label
+                    except ValueError:
+                        text_cell_count += 1
+
+            # A genuine header row has at least 3 short-text cells
+            # (e.g. 'Sl. No', 'Roll No', 'Name of the student', 'CIT-1')
+            if text_cell_count >= 3:
+                best_row = row_idx
+                break
+
+            # Safety: stop scanning after 20 rows to avoid slow workbooks
+            if row_idx >= 20:
+                break
+    finally:
+        wb.close()
+
+    return best_row
+
+
+def analyse_workbook(filepath: str) -> list[dict]:
+    """
+    Open an Excel workbook and return a fully-enriched list of sheet dicts.
+
+    This function is the single entry point called by the Flask route.
+    It closes the ExcelFile handle in all cases (via finally).
+
+    Parameters
+    ----------
+    filepath : absolute path to the saved .xlsx / .xls file
+
+    Returns
+    -------
+    list of sheet dicts (Module 4 format + classification/quality per column)
+    Each sheet dict also includes 'header_row_index' (0-based) so that
+    downstream consumers (e.g. reporter.py) can read data with the
+    correct header row.
+
+    Raises
+    ------
+    ValueError  if the workbook cannot be opened
+    """
+    ext = filepath.rsplit('.', 1)[-1].lower()
+    try:
+        engine = 'openpyxl' if ext == 'xlsx' else 'xlrd'
+        xf = pd.ExcelFile(filepath, engine=engine)
+    except Exception as exc:
+        raise ValueError(f"Cannot open workbook: {exc}") from exc
+
+    sheets = []
+    try:
+        for sheet_name in xf.sheet_names:
+            try:
+                header_row = _detect_header_row(filepath, sheet_name)
+                df = xf.parse(sheet_name, header=header_row)
+            except Exception:
+                sheets.append({
+                    'name':      sheet_name,
+                    'is_empty':  True,
+                    'row_count': 0,
+                    'columns':   [],
+                    'header_row_index': 0,
+                })
+                continue
+            sheet_dict = analyse_sheet(df, sheet_name)
+            sheet_dict['header_row_index'] = header_row
+            sheets.append(sheet_dict)
+    finally:
+        xf.close()
+
+    return sheets

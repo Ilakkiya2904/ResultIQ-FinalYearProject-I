@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Excel — ResultIQ{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Upload Excel Workbook</h1>
+        <p class="page-subtitle">Upload an <strong>.xlsx</strong> or <strong>.xls</strong> file to begin automatic inspection.</p>
+    </div>
+    <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+</div>
+
+<div class="upload-section">
+    <form id="upload-form" method="POST" action="{{ url_for('upload.upload') }}" enctype="multipart/form-data">
+        <!-- Drag-and-drop zone -->
+        <div class="drop-zone" id="drop-zone">
+            <div class="drop-zone-icon">📊</div>
+            <p class="drop-zone-primary">Drag &amp; drop your Excel file here</p>
+            <p class="drop-zone-secondary">or</p>
+            <label for="excel_file" class="btn btn-primary" style="cursor:pointer;">Browse File</label>
+            <input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls" hidden>
+            <p class="drop-zone-hint">Accepted formats: <strong>.xlsx</strong>, <strong>.xls</strong> &nbsp;|&nbsp; Max size: <strong>16 MB</strong></p>
+        </div>
+
+        <!-- Selected file preview (hidden until a file is chosen) -->
+        <div class="file-preview" id="file-preview" style="display:none;">
+            <div class="file-preview-icon">📁</div>
+            <div class="file-preview-info">
+                <span class="file-preview-name" id="file-name"></span>
+                <span class="file-preview-size" id="file-size"></span>
+            </div>
+            <button type="button" class="btn-clear" id="clear-file" title="Remove file">✕</button>
+        </div>
+
+        <div style="text-align:center; margin-top:1.5rem;">
+            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn" disabled>
+                Inspect Workbook →
+            </button>
+        </div>
+    </form>
+</div>
+
+{% if recent_files %}
+<div class="recent-uploads">
+    <h2 class="section-title">Recent Uploads</h2>
+    <div class="file-table-wrapper">
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Sheets</th>
+                    <th>Uploaded</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in recent_files %}
+                <tr>
+                    <td class="filename-cell">
+                        <span class="file-icon">📄</span>
+                        {{ f.original_filename }}
+                    </td>
+                    <td>
+                        {% if f.worksheets %}
+                            <span class="badge badge-blue">{{ f.worksheets|length }} sheet{{ 's' if f.worksheets|length != 1 }}</span>
+                        {% else %}
+                            <span class="badge badge-grey">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="muted-cell">{{ f.uploaded_at.strftime('%d %b %Y, %H:%M') }}</td>
+                    <td>
+                        <a href="{{ url_for('upload.inspect', file_id=f.id) }}" class="btn btn-sm btn-outline">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const dropZone   = document.getElementById('drop-zone');
+    const fileInput  = document.getElementById('excel_file');
+    const preview    = document.getElementById('file-preview');
+    const nameEl     = document.getElementById('file-name');
+    const sizeEl     = document.getElementById('file-size');
+    const clearBtn   = document.getElementById('clear-file');
+    const submitBtn  = document.getElementById('submit-btn');
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1048576).toFixed(2) + ' MB';
+    }
+
+    function showPreview(file) {
+        nameEl.textContent = file.name;
+        sizeEl.textContent = formatBytes(file.size);
+        preview.style.display = 'flex';
+        dropZone.style.display = 'none';
+        submitBtn.disabled = false;
+    }
+
+    function clearFile() {
+        fileInput.value = '';
+        preview.style.display = 'none';
+        dropZone.style.display = 'flex';
+        submitBtn.disabled = true;
+    }
+
+    fileInput.addEventListener('change', function () {
+        if (this.files.length) showPreview(this.files[0]);
+    });
+
+    clearBtn.addEventListener('click', clearFile);
+
+    // Drag-and-drop handlers
+    dropZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', function () {
+        this.classList.remove('drag-over');
+    });
+    dropZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            // Inject into the file input via DataTransfer
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+            showPreview(file);
+        }
+    });
+    // Allow clicking the drop zone itself to open the file dialog
+    dropZone.addEventListener('click', function (e) {
+        if (e.target.tagName !== 'LABEL') fileInput.click();
+    });
+
+    // Add loading spinner on form submit
+    const uploadForm = document.getElementById('upload-form');
+    uploadForm.addEventListener('submit', function(e) {
+        if (submitBtn.classList.contains('is-loading')) {
+            e.preventDefault();
+            return;
+        }
+        
+        submitBtn.classList.add('is-loading');
+        submitBtn.style.opacity = '0.8';
+        submitBtn.style.cursor = 'wait';
+        submitBtn.style.pointerEvents = 'none';
+        
+        submitBtn.innerHTML = `
+            <svg class="spinner-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.25"></circle>
+              <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Uploading...
+        `;
+    });
+})();
+</script>
+{% endblock %}

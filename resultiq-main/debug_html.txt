@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Preview — m6test3 — Exam — ResultIQ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">RESULT<span>IQ</span></a>
+            <div class="nav-links">
+                
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/upload" class="nav-link">Upload</a>
+                    <a href="/logout" class="nav-link">Logout</a>
+                
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+            
+        
+        
+
+
+<nav class="breadcrumb">
+  <a href="/dashboard">Dashboard</a>
+  <span class="sep">›</span>
+  <a href="/upload">Upload</a>
+  <span class="sep">›</span>
+  <a href="/upload/inspect/33cd7eaa-fc87-40ae-be96-f76810fe6a26">Inspect</a>
+  <span class="sep">›</span>
+  <a href="/analyse/33cd7eaa-fc87-40ae-be96-f76810fe6a26">Analyse</a>
+  <span class="sep">›</span>
+  <span class="current">Report</span>
+</nav>
+
+
+<div class="steps mb-3">
+  <div class="step done">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Upload</span>
+  </div>
+  <div class="step-line done"></div>
+  <div class="step done">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Inspect</span>
+  </div>
+  <div class="step-line done"></div>
+  <div class="step done">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Analyse</span>
+  </div>
+  <div class="step-line done"></div>
+  <div class="step active">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Report</span>
+  </div>
+</div>
+
+
+<div class="report-hero">
+  <div>
+    <div class="report-hero-title">m6test3 — Exam</div>
+    <div class="report-hero-meta">
+      <span>📄 m6test3.xlsx</span>
+      <span>📋 Sheet: <strong>Exam</strong></span>
+      <span>🕐 31 Aug 2026, 10:27</span>
+      
+      <span>📚 3 subjects</span>
+      
+    </div>
+  </div>
+  <div class="report-actions">
+    <a href="/analyse/33cd7eaa-fc87-40ae-be96-f76810fe6a26"
+       class="btn btn-outline btn-sm">← Re-analyse</a>
+    <a href="/report/1d1381a3-9585-4d7c-b738-1ea4d4bb326b/download"
+       class="btn btn-success" id="download-btn">
+      ⬇ Download Excel
+    </a>
+  </div>
+</div>
+
+
+
+<div class="stats-grid">
+
+  <div class="stat-card">
+    <div class="stat-label">Total Students</div>
+    <div class="stat-value">5</div>
+    <div class="stat-note">Records processed</div>
+  </div>
+
+  <div class="stat-card stat-pass">
+    <div class="stat-label">Passed</div>
+    <div class="stat-value" style="color:var(--color-success);">4</div>
+    <div class="stat-note">80.0% pass rate</div>
+  </div>
+
+  <div class="stat-card stat-fail">
+    <div class="stat-label">Failed</div>
+    <div class="stat-value" style="color:var(--color-danger);">1</div>
+    <div class="stat-note">
+      20.0% fail rate
+    </div>
+  </div>
+
+  <div class="stat-card stat-avg">
+    <div class="stat-label">Avg Percentage</div>
+    <div class="stat-value" style="color:#C4B5FD;">67.53%</div>
+    <div class="stat-note">Class average</div>
+  </div>
+
+  <div class="stat-card stat-high">
+    <div class="stat-label">Highest</div>
+    <div class="stat-value" style="color:#FCD34D;">81.67%</div>
+    <div class="stat-note">Best performer</div>
+  </div>
+
+  <div class="stat-card stat-low">
+    <div class="stat-label">Lowest</div>
+    <div class="stat-value" style="color:#F472B6;">45.0%</div>
+    <div class="stat-note">Needs attention</div>
+  </div>
+
+</div>
+
+
+<div style="margin-bottom:2rem;" aria-label="Pass/fail distribution">
+  <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--color-text-muted);margin-bottom:.4rem;">
+    <span>Pass: <strong style="color:var(--color-success);">4</strong></span>
+    <span>Fail: <strong style="color:var(--color-danger);">1</strong></span>
+  </div>
+  <div style="height:10px;background:var(--color-surface-2);border-radius:5px;overflow:hidden;">
+    
+    <div style="height:100%;width:80.0%;background:linear-gradient(90deg,#059669,#10B981);border-radius:5px;transition:width .8s ease;"
+         title="80.0% passed"></div>
+  </div>
+</div>
+
+
+
+
+
+<div class="table-toolbar">
+  <h2 class="section-title" style="margin:0;">Detailed Results</h2>
+  <input type="text"
+         id="table-search"
+         class="search-input"
+         placeholder="🔍 Search by name, roll number…"
+         autocomplete="off">
+</div>
+
+<div class="table-wrapper">
+  <table class="data-table" id="results-table">
+    <thead>
+      <tr>
+        
+        <th class=""
+            data-col="Name">
+          Name
+          
+        </th>
+        
+        <th class=""
+            data-col="Sub1">
+          Sub1
+          
+        </th>
+        
+        <th class=""
+            data-col="Sub2">
+          Sub2
+          
+        </th>
+        
+        <th class=""
+            data-col="Sub3">
+          Sub3
+          
+        </th>
+        
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Alice
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            80
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            75.0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            88.0
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Bob
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            90
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            85.0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            70.0
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Charlie
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            AA
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            70.0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            65.0
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Diana
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            60
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            55.0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            80.0
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Eve
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            30
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            90.0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            75.0
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            RESULT ANALYSIS
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Appeared
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            5
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Passed
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            4
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Failed
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            1
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            Pass %
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            80.0%
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            0–49
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            1
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            50–59
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            60–69
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            2
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            70–79
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            80–89
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            2
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+      <tr class="result-row">
+        
+        
+        <td class="
+          
+          
+        ">
+          
+            90–100
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            0
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+        
+        <td class="
+          marks-col col-center
+          
+          
+        ">
+          
+            —
+          
+        </td>
+        
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+<div id="no-results" class="empty-state hidden">
+  <p>No students match your search.</p>
+</div>
+
+
+
+
+
+<div class="card mt-4">
+  <div class="card-header">
+    <span class="card-title">📋 Subjects Analysed</span>
+    <span class="badge badge-blue">3 subjects</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+    
+      <span class="cls-badge marks">Sub1</span>
+    
+      <span class="cls-badge marks">Sub2</span>
+    
+      <span class="cls-badge marks">Sub3</span>
+    
+  </div>
+  <p class="text-muted mt-2" style="font-size:.8rem;">
+    Pass criteria: Overall ≥ 40% · Each subject ≥ 35% · Max marks per subject = 100
+  </p>
+</div>
+
+
+
+<div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+  <a href="/upload" class="btn btn-outline">← New Upload</a>
+  <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+  <a href="/report/1d1381a3-9585-4d7c-b738-1ea4d4bb326b/download"
+     class="btn btn-success">
+    ⬇ Download Excel Report
+  </a>
+</div>
+
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 ResultIQ. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    
+<script>
+(function () {
+  // ---- Animate stat cards ---- 
+  const cards = document.querySelectorAll('.stat-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.style.opacity = '1';
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(c => observer.observe(c));
+
+  // ---- Table search ----
+  const searchInput  = document.getElementById('table-search');
+  const tableBody    = document.getElementById('table-body');
+  const noResults    = document.getElementById('no-results');
+  if (!searchInput || !tableBody) return;
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.toLowerCase().trim();
+    const rows  = tableBody.querySelectorAll('tr.result-row');
+    let visible = 0;
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const show = !query || text.includes(query);
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (noResults) {
+      noResults.classList.toggle('hidden', visible > 0);
+    }
+  });
+
+  // ---- Column sort ----
+  const table = document.getElementById('results-table');
+  if (table) {
+    table.querySelectorAll('thead th').forEach((th, colIdx) => {
+      th.style.cursor = 'pointer';
+      th.title = th.title || 'Click to sort';
+      let asc = true;
+      th.addEventListener('click', () => {
+        const tbody = table.querySelector('tbody');
+        const rows  = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+          const aVal = a.cells[colIdx]?.textContent.trim() ?? '';
+          const bVal = b.cells[colIdx]?.textContent.trim() ?? '';
+          const aNum = parseFloat(aVal);
+          const bNum = parseFloat(bVal);
+          if (!isNaN(aNum) && !isNaN(bNum)) {
+            return asc ? aNum - bNum : bNum - aNum;
+          }
+          return asc
+            ? aVal.localeCompare(bVal)
+            : bVal.localeCompare(aVal);
+        });
+        rows.forEach(r => tbody.appendChild(r));
+        // Update sort indicator
+        table.querySelectorAll('thead th').forEach(h => h.removeAttribute('data-sort'));
+        th.setAttribute('data-sort', asc ? 'asc' : 'desc');
+        asc = !asc;
+      });
+    });
+  }
+
+  // ---- Download button feedback ----
+  const dlBtn = document.getElementById('download-btn');
+  if (dlBtn) {
+    dlBtn.addEventListener('click', () => {
+      const orig = dlBtn.innerHTML;
+      dlBtn.innerHTML = '⬇ Downloading…';
+      setTimeout(() => dlBtn.innerHTML = orig, 3000);
+    });
+  }
+})();
+</script>
+
+<style>
+  /* Sort indicator arrows */
+  thead th[data-sort="asc"]::after  { content: ' ↑'; color: var(--color-primary); }
+  thead th[data-sort="desc"]::after { content: ' ↓'; color: var(--color-primary); }
+</style>
+
+</body>
+</html>

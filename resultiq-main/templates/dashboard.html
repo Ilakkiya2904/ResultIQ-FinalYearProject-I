@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard — ResultIQ{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Welcome, {{ current_user.name }}</h1>
+        <p class="page-subtitle">{{ current_user.department }}{% if current_user.designation %} · {{ current_user.designation }}{% endif %}</p>
+    </div>
+</div>
+
+<div class="dashboard-actions">
+    <a href="{{ url_for('upload.upload') }}" class="action-card">
+        <div class="action-icon">📊</div>
+        <div class="action-body">
+            <h3>Upload Workbook</h3>
+            <p>Upload an Excel file to inspect and analyse student results.</p>
+        </div>
+        <span class="action-arrow">→</span>
+    </a>
+</div>
+
+<div class="recent-uploads" style="margin-top:2rem;">
+    <h2 class="section-title">Recent Workbooks</h2>
+    {% set recent = current_user.uploaded_files | sort(attribute='uploaded_at', reverse=True) %}
+    {% if recent %}
+    <div class="file-table-wrapper">
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Sheets</th>
+                    <th>Uploaded</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in recent[:5] %}
+                <tr>
+                    <td class="filename-cell">
+                        <span class="file-icon">📄</span>{{ f.original_filename }}
+                    </td>
+                    <td>
+                        {% if f.worksheets %}
+                            <span class="badge badge-blue">{{ f.worksheets|length }}</span>
+                        {% else %}
+                            <span class="badge badge-grey">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="muted-cell">{{ f.uploaded_at.strftime('%d %b %Y') }}</td>
+                    <td>
+                        <a href="{{ url_for('upload.inspect', file_id=f.id) }}" class="btn btn-sm btn-outline">Inspect</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No workbooks uploaded yet. <a href="{{ url_for('upload.upload') }}">Upload your first one →</a></p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="recent-reports" style="margin-top:3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h2 class="section-title">Recent Reports</h2>
+        <a href="{{ url_for('report.history') }}" class="btn btn-sm btn-outline">View All Reports →</a>
+    </div>
+    {% if recent_reports %}
+    <div class="file-table-wrapper">
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Report Name</th>
+                    <th>Status</th>
+                    <th>Generated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in recent_reports %}
+                <tr>
+                    <td class="filename-cell">
+                        <span class="file-icon">📊</span>{{ r.report_name }}
+                    </td>
+                    <td>
+                        {% if r.status == 'completed' %}
+                            <span class="badge badge-green">Completed</span>
+                        {% elif r.status == 'failed' %}
+                            <span class="badge badge-red">Failed</span>
+                        {% else %}
+                            <span class="badge badge-grey">{{ r.status | title }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="muted-cell">{{ r.generated_at.strftime('%d %b %Y') if r.generated_at else '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('report.preview', report_id=r.id) }}" class="btn btn-sm btn-primary">Preview</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No reports generated yet. Analyze a workbook to create one.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

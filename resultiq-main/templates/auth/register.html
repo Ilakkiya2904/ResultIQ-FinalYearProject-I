@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Register — ResultIQ{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width:520px;">
+  <div class="auth-card">
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-subtitle">Join ResultIQ to analyse student results</p>
+
+    <form method="POST" action="{{ url_for('auth.register') }}" id="register-form">
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name *</label>
+        <input type="text" id="name" name="name" class="form-input"
+               required autofocus autocomplete="name" placeholder="Dr. Jane Smith">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address *</label>
+          <input type="email" id="email" name="email" class="form-input"
+                 required autocomplete="email" placeholder="jane@college.edu">
+        </div>
+        <div class="form-group">
+          <label for="username" class="form-label">Username *</label>
+          <input type="text" id="username" name="username" class="form-input"
+                 required autocomplete="username" placeholder="jsmith">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="department" class="form-label">Department</label>
+          <input type="text" id="department" name="department" class="form-input"
+                 placeholder="Computer Science">
+        </div>
+        <div class="form-group">
+          <label for="designation" class="form-label">Designation</label>
+          <input type="text" id="designation" name="designation" class="form-input"
+                 placeholder="Professor">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password" class="form-label">Password *</label>
+          <div style="position: relative;">
+            <input type="password" id="password" name="password" class="form-input"
+                   required autocomplete="new-password" placeholder="••••••••" style="padding-right: 40px;" oninput="validatePassword()">
+            <button type="button" class="btn-clear" onclick="togglePassword('password', 'eye-icon-reg')" 
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted);" title="Toggle Password Visibility">
+              <span id="eye-icon-reg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirm_password" class="form-label">Confirm Password *</label>
+          <div style="position: relative;">
+            <input type="password" id="confirm_password" name="confirm_password" class="form-input"
+                   required autocomplete="new-password" placeholder="••••••••" style="padding-right: 40px;" oninput="validatePassword()">
+            <button type="button" class="btn-clear" onclick="togglePassword('confirm_password', 'eye-icon-confirm')" 
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted);" title="Toggle Password Visibility">
+              <span id="eye-icon-confirm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="password-conditions" style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.25rem; background: var(--color-bg); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+          <p style="margin-bottom: 0.75rem; font-weight: 600; color: var(--color-text);">Password Requirements:</p>
+          <ul style="list-style-type: none; padding-left: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+              <li id="cond-length" style="color: var(--color-danger);">❌ Minimum 8 characters</li>
+              <li id="cond-upper" style="color: var(--color-danger);">❌ 1 uppercase letter</li>
+              <li id="cond-lower" style="color: var(--color-danger);">❌ 1 lowercase letter</li>
+              <li id="cond-number" style="color: var(--color-danger);">❌ 1 number</li>
+              <li id="cond-special" style="color: var(--color-danger);">❌ 1 special character</li>
+              <li id="cond-nospace" style="color: var(--color-danger);">❌ No spaces allowed</li>
+              <li id="cond-match" style="grid-column: 1 / -1; color: var(--color-danger);">❌ Passwords match</li>
+          </ul>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="register-btn"
+              style="width:100%;justify-content:center;margin-top:.5rem;">
+        Create Account →
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account?
+      <a href="{{ url_for('auth.login') }}">Sign in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    
+    const eyeSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    const eyeOffSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = eyeOffSvg;
+    } else {
+        input.type = 'password';
+        icon.innerHTML = eyeSvg;
+    }
+}
+
+function validatePassword() {
+    const pass = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm_password').value;
+    
+    const updateCond = (id, condition) => {
+        const el = document.getElementById(id);
+        const text = el.innerText.substring(2);
+        if (condition) {
+            el.innerText = '✅ ' + text;
+            el.style.color = 'var(--color-success)';
+        } else {
+            el.innerText = '❌ ' + text;
+            el.style.color = 'var(--color-danger)';
+        }
+    };
+    
+    updateCond('cond-length', pass.length >= 8);
+    updateCond('cond-upper', /[A-Z]/.test(pass));
+    updateCond('cond-lower', /[a-z]/.test(pass));
+    updateCond('cond-number', /[0-9]/.test(pass));
+    updateCond('cond-special', /[^A-Za-z0-9\s]/.test(pass));
+    updateCond('cond-nospace', pass.length > 0 && !/\s/.test(pass));
+    updateCond('cond-match', pass.length > 0 && pass === confirm);
+}
+
+// Add loading spinner on form submit
+const registerForm = document.getElementById('register-form');
+const registerBtn = document.getElementById('register-btn');
+if (registerForm && registerBtn) {
+    registerForm.addEventListener('submit', function(e) {
+        if (registerBtn.classList.contains('is-loading')) {
+            e.preventDefault();
+            return;
+        }
+        
+        registerBtn.classList.add('is-loading');
+        registerBtn.style.opacity = '0.8';
+        registerBtn.style.cursor = 'wait';
+        registerBtn.style.pointerEvents = 'none';
+        
+        registerBtn.innerHTML = `
+            <svg class="spinner-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.25"></circle>
+              <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Creating Account...
+        `;
+    });
+}
+</script>
+{% endblock %}

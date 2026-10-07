@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}Column Analysis — {{ record.original_filename }} — ResultIQ{% endblock %}
+
+{% block content %}
+
+{# ---- Breadcrumb ---- #}
+<nav class="breadcrumb">
+  <a href="{{ url_for('auth.dashboard') }}">Dashboard</a>
+  <span class="sep">›</span>
+  <a href="{{ url_for('upload.upload') }}">Upload</a>
+  <span class="sep">›</span>
+  <a href="{{ url_for('upload.inspect', file_id=record.id) }}">Inspect</a>
+  <span class="sep">›</span>
+  <span class="current">Analyse</span>
+</nav>
+
+{# ---- Step indicator ---- #}
+<div class="steps mb-3">
+  <div class="step done">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Upload</span>
+  </div>
+  <div class="step-line done"></div>
+  <div class="step done">
+    <div class="step-dot">✓</div>
+    <span class="step-label">Inspect</span>
+  </div>
+  <div class="step-line done"></div>
+  <div class="step active">
+    <div class="step-dot">3</div>
+    <span class="step-label">Analyse</span>
+  </div>
+  <div class="step-line"></div>
+  <div class="step">
+    <div class="step-dot">4</div>
+    <span class="step-label">Generate Report</span>
+  </div>
+</div>
+
+{# ---- Page header ---- #}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Column Classification</h1>
+    <p class="page-subtitle">
+      <strong>{{ record.original_filename }}</strong>
+      &nbsp;·&nbsp;
+      {{ sheets | length }} sheet{{ 's' if sheets | length != 1 }}
+      &nbsp;·&nbsp;
+      <span class="text-success">{{ marks_count }} MARKS column{{ 's' if marks_count != 1 }} detected</span>
+    </p>
+  </div>
+  <a href="{{ url_for('upload.inspect', file_id=record.id) }}" class="btn btn-outline">← Back to Inspect</a>
+</div>
+
+{# ---- Classification summary chips ---- #}
+<div class="classify-summary">
+  {% if classification_counts.get('marks', 0) %}
+  <div class="classify-chip has-marks">
+    <span class="count">{{ classification_counts.marks }}</span>
+    <span class="cls-badge marks">marks</span>
+  </div>
+  {% endif %}
+  {% if classification_counts.get('identity', 0) %}
+  <div class="classify-chip">
+    <span class="count">{{ classification_counts.identity }}</span>
+    <span class="cls-badge identity">identity</span>
+  </div>
+  {% endif %}
+  {% if classification_counts.get('category', 0) %}
+  <div class="classify-chip">
+    <span class="count">{{ classification_counts.category }}</span>
+    <span class="cls-badge category">category</span>
+  </div>
+  {% endif %}
+  {% if classification_counts.get('metadata', 0) %}
+  <div class="classify-chip">
+    <span class="count">{{ classification_counts.metadata }}</span>
+    <span class="cls-badge metadata">metadata</span>
+  </div>
+  {% endif %}
+  {% if classification_counts.get('empty', 0) %}
+  <div class="classify-chip">
+    <span class="count">{{ classification_counts.empty }}</span>
+    <span class="cls-badge empty">empty</span>
+  </div>
+  {% endif %}
+  {% if classification_counts.get('text', 0) %}
+  <div class="classify-chip">
+    <span class="count">{{ classification_counts.text }}</span>
+    <span class="cls-badge text">text</span>
+  </div>
+  {% endif %}
+</div>
+
+{# ---- Sheet tabs ---- #}
+{% if not sheets %}
+  <div class="empty-state"><p>No sheets were analysed.</p></div>
+{% else %}
+
+<div class="sheet-tabs" id="sheet-tabs">
+  {% for sheet in sheets %}
+  <button class="sheet-tab {% if loop.first %}active{% endif %} {% if sheet.is_empty %}empty{% endif %}"
+          data-sheet="{{ loop.index0 }}">
+    {{ sheet.name }}
+    {% set sheet_marks = sheet.columns | selectattr('classification','equalto','marks') | list | length %}
+    {% if sheet_marks %}
+      <span class="badge badge-blue" style="margin-left:.25rem;">{{ sheet_marks }} marks</span>
+    {% elif sheet.is_empty %}
+      <span class="badge badge-grey" style="margin-left:.25rem;">empty</span>
+    {% endif %}
+  </button>
+  {% endfor %}
+</div>
+
+{% for sheet in sheets %}
+<div class="sheet-panel {% if loop.first %}active{% endif %}" id="panel-{{ loop.index0 }}">
+
+  {% if sheet.is_empty %}
+  <div class="empty-state" style="padding:2rem 0;">
+    <p>This sheet is empty or contains no readable columns.</p>
+  </div>
+  {% else %}
+
+  <div class="sheet-meta" style="margin-bottom:1rem;">
+    <span class="sheet-meta-item">📋 <strong>{{ sheet.row_count }}</strong> rows</span>
+    <span class="sheet-meta-item">📊 <strong>{{ sheet.columns | length }}</strong> columns</span>
+    {% set marks_in_sheet = sheet.columns | selectattr('classification','equalto','marks') | list | length %}
+    {% if marks_in_sheet %}
+    <span class="sheet-meta-item text-primary">🎯 <strong>{{ marks_in_sheet }}</strong> marks column{{ 's' if marks_in_sheet != 1 }}</span>
+    {% endif %}
+  </div>
+
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Column Name</th>
+          <th>Classification</th>
+          <th>Data Quality</th>
+          <th>Filled</th>
+          <th>Missing</th>
+          <th>Numeric</th>
+          <th>Sample Values</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for col in sheet.columns %}
+        {% set q = col.quality %}
+        <tr>
+          <td class="col-center text-muted" style="width:36px;">{{ loop.index }}</td>
+          <td>
+            <strong>{{ col.name }}</strong>
+            {% if col.classification == 'marks' %}
+              <span style="color:var(--color-primary);font-size:.8rem;margin-left:.35rem;">●</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="cls-badge {{ col.classification }}">{{ col.classification }}</span>
+          </td>
+          <td style="min-width:100px;">
+            {% set fill_pct = ((q.filled / q.total * 100) | round(0)) if q.total > 0 else 0 %}
+            <div class="quality-bar" title="{{ fill_pct }}% filled">
+              <div class="quality-bar-fill {% if fill_pct >= 90 %}full{% elif fill_pct >= 60 %}ok{% elif fill_pct >= 30 %}low{% else %}poor{% endif %}"
+                   style="width:{{ fill_pct }}%;"></div>
+            </div>
+            <span style="font-size:.72rem;color:var(--color-text-muted);">{{ fill_pct }}%</span>
+          </td>
+          <td class="col-center">
+            <span class="badge badge-green">{{ q.filled }}</span>
+          </td>
+          <td class="col-center">
+            {% if q.missing > 0 %}
+              <span class="badge badge-yellow">{{ q.missing }}</span>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td class="col-center">
+            {% if q.numeric_count > 0 %}
+              <span class="badge badge-blue">{{ q.numeric_count }}</span>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="sample-chips">
+              {% for s in col.samples %}
+                <span class="sample-chip">{{ s }}</span>
+              {% else %}
+                <span class="text-muted" style="font-size:.8rem;">—</span>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+</div>
+{% endfor %}
+
+{% endif %}
+
+{# ---- Generate Report Section ---- #}
+{% if marks_count > 0 %}
+<div class="generate-section">
+  <div class="generate-section-info">
+    <h3>🚀 Ready to Generate Report</h3>
+    <p>
+      {{ marks_count }} MARKS column{{ 's' if marks_count != 1 }} detected across
+      {{ sheets | length }} sheet{{ 's' if sheets | length != 1 }}.
+      Select a sheet and click <strong>Generate Report</strong> to compute
+      results with Total, Average, Percentage, and Pass/Fail for each student.
+    </p>
+  </div>
+  <form method="POST" action="{{ url_for('report.generate') }}" class="generate-controls">
+    <input type="hidden" name="file_id" value="{{ record.id }}">
+    {% if sheets | length > 1 %}
+    <div>
+      <label for="sheet-select" style="font-size:.8rem;color:var(--color-text-muted);display:block;margin-bottom:.3rem;">Sheet</label>
+      <select name="sheet_name" id="sheet-select" class="select-field">
+        {% for sheet in sheets %}
+          {% set sheet_marks = sheet.columns | selectattr('classification','equalto','marks') | list | length %}
+          {% if not sheet.is_empty and sheet_marks > 0 %}
+          <option value="{{ sheet.name }}" {% if loop.first %}selected{% endif %}>
+            {{ sheet.name }} ({{ sheet_marks }} marks col{{ 's' if sheet_marks != 1 }})
+          </option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    {% else %}
+      <input type="hidden" name="sheet_name" value="{{ sheets[0].name if sheets else '' }}">
+    {% endif %}
+    <button type="submit" class="btn btn-success btn-lg" id="gen-btn">
+      📊 Generate Report
+    </button>
+  </form>
+</div>
+{% else %}
+<div class="card mt-4" style="border-color:var(--color-warning-bg);">
+  <p style="color:var(--color-warning);font-weight:600;">
+    ⚠️ No MARKS columns were detected in this workbook.
+  </p>
+  <p class="text-muted mt-1" style="font-size:.875rem;">
+    The analyser looks for columns where ≥ 60% of values are numeric.
+    Make sure your marks data is numeric (not text like "AB", "NA" throughout every row).
+  </p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  // Sheet tabs
+  const tabs   = document.querySelectorAll('.sheet-tab');
+  const panels = document.querySelectorAll('.sheet-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = tab.dataset.sheet;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + idx).classList.add('active');
+    });
+  });
+
+  // Show loading state on generate
+  const genBtn = document.getElementById('gen-btn');
+  if (genBtn) {
+    genBtn.closest('form').addEventListener('submit', () => {
+      genBtn.disabled = true;
+      genBtn.innerHTML = '<span class="spinner"></span> Generating…';
+    });
+  }
+})();
+</script>
+{% endblock %}

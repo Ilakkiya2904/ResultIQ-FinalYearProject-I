@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Report History — ResultIQ{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Report History</h1>
+        <p class="page-subtitle">View and download all your generated reports.</p>
+    </div>
+    <div>
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="recent-uploads" style="margin-top:2rem;">
+    {% if reports %}
+    <div class="file-table-wrapper">
+        <table class="file-table">
+            <thead>
+                <tr>
+                    <th>Report Name</th>
+                    <th>Status</th>
+                    <th>Generated</th>
+                    <th>Downloaded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reports %}
+                <tr>
+                    <td class="filename-cell">
+                        <span class="file-icon">📊</span>{{ r.report_name }}
+                    </td>
+                    <td>
+                        {% if r.status == 'completed' %}
+                            <span class="badge badge-green">Completed</span>
+                        {% elif r.status == 'failed' %}
+                            <span class="badge badge-red">Failed</span>
+                        {% else %}
+                            <span class="badge badge-grey">{{ r.status | title }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="muted-cell">{{ r.generated_at.strftime('%d %b %Y, %H:%M') if r.generated_at else '-' }}</td>
+                    <td class="muted-cell">{{ r.downloaded_at.strftime('%d %b %Y, %H:%M') if r.downloaded_at else 'Never' }}</td>
+                    <td style="display: flex; gap: 0.5rem;">
+                        <a href="{{ url_for('report.preview', report_id=r.id) }}" class="btn btn-sm btn-primary">Preview</a>
+                        {% if r.status == 'completed' %}
+                        <a href="{{ url_for('report.download', report_id=r.id) }}" class="btn btn-sm btn-outline">Download</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No reports generated yet. Analyze a workbook to create one.</p>
+        <div style="margin-top:1rem;">
+            <a href="{{ url_for('upload.upload') }}" class="btn btn-primary">Upload Workbook</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

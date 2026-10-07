@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Internal Server Error | RESULTIQ{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1 class="error-code">500</h1>
+    <h2>Internal Server Error</h2>
+    <p>Something went wrong on our end. Please try again later.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Return Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,465 @@
+=== OUTPUT FORMAT ===
+Sheet: Table 1  max_row=66  max_col=7
+Merged cells: ['A2:G2', 'A1:G1']
+
+--- Analysis area (rows 49-60) ---
+  Cell A49: val=46
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B49: val=255904
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C49: val=910624105301
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D49: val='K V K PRANAV'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E49: val='AA'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F49: val=65
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G49: val=50
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A50: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B50: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C50: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D50: val='appeared'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E50: val='=46-COUNTIF(E4:E49,"aa")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F50: val='=46-COUNTIF(F4:F49,"aa")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G50: val='=46-COUNTIF(G4:G49,"aa")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A51: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B51: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C51: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D51: val='passed '
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E51: val='=COUNTIF(E4:E49,">=50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F51: val='=COUNTIF(F4:F49,">=50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G51: val='=COUNTIF(G4:G49,">=50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A52: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B52: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C52: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D52: val='% passed'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E52: val='=E51/E50*100'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F52: val='=F51/F50*100'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G52: val='=G51/G50*100'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A53: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B53: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C53: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D53: val='below 50%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E53: val='=COUNTIF(E4:E49,"<50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F53: val='=COUNTIF(F4:F49,"<50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G53: val='=COUNTIF(G4:G49,"<50")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A54: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B54: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C54: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D54: val='50%-60%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E54: val='=COUNTIFS(E4:E49,">=50",E4:E49,"<=60")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F54: val='=COUNTIFS(F4:F49,">=50",F4:F49,"<=60")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G54: val='=COUNTIFS(G4:G49,">=50",G4:G49,"<=60")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A55: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B55: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C55: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D55: val='61%-70%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E55: val='=COUNTIFS(E4:E49,">=61",E4:E49,"<=70")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F55: val='=COUNTIFS(F4:F49,">=61",F4:F49,"<=70")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G55: val='=COUNTIFS(G4:G49,">=61",G4:G49,"<=70")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A56: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B56: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C56: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D56: val='71%-80%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E56: val='=COUNTIFS(E4:E49,">=71",E4:E49,"<=80")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F56: val='=COUNTIFS(F4:F49,">=71",F4:F49,"<=80")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G56: val='=COUNTIFS(G4:G49,">=71",G4:G49,"<=80")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A57: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B57: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C57: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D57: val='81%-90%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E57: val='=COUNTIFS(E4:E49,">=81",E4:E49,"<=90")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F57: val='=COUNTIFS(F4:F49,">=81",F4:F49,"<=90")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G57: val='=COUNTIFS(G4:G49,">=81",G4:G49,"<=90")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell A58: val=None
+    font: bold=False, size=11.0, color=FF000000
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell B58: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=General
+  Cell C58: val=None
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell D58: val='91%-100%'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=left, v=center, wrap=None
+    num_fmt=General
+  Cell E58: val='=COUNTIFS(E4:E49,">=91",E4:E49,"<=100")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell F58: val='=COUNTIFS(F4:F49,">=91",F4:F49,"<=100")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+  Cell G58: val='=COUNTIFS(G4:G49,">=91",G4:G49,"<=100")'
+    font: bold=False, size=11.0, color=?
+    fill: type=None, fg=00000000
+    border: left=thick, right=thick, top=thick, bottom=thick
+    align: h=center, v=center, wrap=None
+    num_fmt=0
+
+--- Column widths ---
+  col A: width=6.8984375
+  col B: width=8.6484375
+  col C: width=16.34765625
+  col D: width=26.6484375
+  col E: width=8.8984375
+  col F: width=7.44921875
+
+--- Row heights (rows 1-10 + 49-60) ---
+  row 1: height=56.0
+  row 2: height=35.5
+  row 3: height=37.25
+  row 4: height=20.1
+  row 5: height=20.1
+  row 6: height=20.1
+  row 7: height=20.1
+  row 8: height=20.1
+  row 9: height=20.1
+  row 10: height=20.1
+  row 49: height=20.1
+  row 50: height=20.1
+  row 51: height=20.1
+  row 52: height=20.1
+  row 53: height=20.1
+  row 54: height=20.1
+  row 55: height=20.1
+  row 56: height=20.1
+  row 57: height=15.75
+  row 58: height=15.75
+  row 59: height=14.0
+
+--- Header row (row 3) cells ---
+  A3: val='Sl. No', bold=True, fill_fg=?, border_l=thick
+  B3: val='Roll No', bold=True, fill_fg=?, border_l=thick
+  C3: val='Regiter Number', bold=True, fill_fg=?, border_l=thick
+  D3: val='Name of the student', bold=True, fill_fg=?, border_l=thick
+  E3: val='CIT-1', bold=True, fill_fg=?, border_l=thick
+  F3: val='CIT-2', bold=True, fill_fg=?, border_l=thick
+  G3: val='CIT-3', bold=True, fill_fg=?, border_l=thick
